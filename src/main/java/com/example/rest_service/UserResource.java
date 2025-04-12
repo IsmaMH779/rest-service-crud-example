@@ -5,6 +5,7 @@ import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
+import java.util.Map;
 
 @RestController
 @RequestMapping(UserResource.USERS)
@@ -32,8 +33,20 @@ public class UserResource {
     }
 
     @PostMapping
-    public ResponseEntity<UserDTO> addUser(@RequestBody UserDTO userDTO) {
+    public ResponseEntity<String> addUser(@RequestBody UserDTO userDTO) {
         userController.addNewUser(userDTO);
-        return ResponseEntity.ok().body(userDTO);
+        return ResponseEntity.ok().body("Usuario añadido con exito");
+    }
+
+    @PutMapping("/{id}")
+    public ResponseEntity<String> updateUser(@PathVariable int id, @RequestBody UserDTO userDTO) {
+        userController.updateUser(id, userDTO);
+        return ResponseEntity.ok().body("Usuario con id " + id + " actualizado con exito");
+    }
+
+    @PatchMapping("/{id}/email")
+    public ResponseEntity<?> patchEmail(@PathVariable int id, @RequestBody Map<String, String> email) {
+        userController.patchEmail(id, email);
+        return ResponseEntity.ok().body("Se ha actualizado el email del usuario con id " + id);
     }
 }

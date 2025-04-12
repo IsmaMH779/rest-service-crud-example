@@ -1,14 +1,14 @@
 package com.example.rest_service;
 
-import jakarta.persistence.Entity;
-import jakarta.persistence.Id;
-import jakarta.persistence.Table;
+import jakarta.persistence.*;
 
 @Entity
 @Table(name = "users")
 public class User {
     @Id
-    Integer id;
+    @GeneratedValue(strategy = GenerationType.IDENTITY)
+    int id;
+
     private String email;
     private String fullname;
     private String password;

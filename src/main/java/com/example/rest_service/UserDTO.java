@@ -15,10 +15,6 @@ public class UserDTO {
         this.password = password;
     }
 
-    public UserDTO(User user) {
-
-    }
-
     public UserDTO(Object o) {
         if (o instanceof User user) {
             this.id = user.id;

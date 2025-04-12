@@ -4,6 +4,7 @@ import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
+import java.util.Map;
 
 @Controller
 public class UserController {
@@ -26,5 +27,13 @@ public class UserController {
     public void removeUser(int id) {
         userService.deleteUser(id);
 
+    }
+
+    public void updateUser(int id, UserDTO userDTO) {
+        userService.updateUser(id, userDTO);
+    }
+
+    public void patchEmail(int id, Map<String, String> email) {
+        userService.updateUserEmail(id, email);
     }
 }
