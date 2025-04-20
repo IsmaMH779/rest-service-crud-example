@@ -1,11 +1,11 @@
 package com.example.rest_service;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.http.ResponseEntity;
 import org.springframework.web.bind.annotation.*;
 
 import java.util.List;
-import java.util.Map;
 
 @RestController
 @RequestMapping(UserResource.USERS)
@@ -44,9 +44,8 @@ public class UserResource {
         return ResponseEntity.ok().body("Usuario con id " + id + " actualizado con exito");
     }
 
-    @PatchMapping("/{id}/email")
-    public ResponseEntity<?> patchEmail(@PathVariable int id, @RequestBody Map<String, String> email) {
-        userController.patchEmail(id, email);
-        return ResponseEntity.ok().body("Se ha actualizado el email del usuario con id " + id);
+    @PatchMapping(path = "/{id}", consumes = "application/json-patch+json")
+    public ResponseEntity<?> patchEmail(@PathVariable int id, @RequestBody JsonPatch patch) {
+        return ResponseEntity.ok().body(userController.userPatch(id, patch));
     }
 }

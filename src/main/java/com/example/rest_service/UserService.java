@@ -1,11 +1,14 @@
 package com.example.rest_service;
 
+import com.fasterxml.jackson.core.JsonProcessingException;
+import com.fasterxml.jackson.databind.JsonNode;
+import com.fasterxml.jackson.databind.ObjectMapper;
+import com.github.fge.jsonpatch.JsonPatch;
+import com.github.fge.jsonpatch.JsonPatchException;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Service;
 import org.springframework.transaction.annotation.Transactional;
-import org.springframework.util.ReflectionUtils;
 
-import java.lang.reflect.Field;
 import java.util.List;
 import java.util.Map;
 import java.util.Optional;
@@ -14,6 +17,8 @@ import java.util.Optional;
 public class UserService {
     @Autowired
     UserDAO userDAO;
+    @Autowired
+    ObjectMapper objectMapper;
 
     public List<User> getUsers() {
 
@@ -55,8 +60,21 @@ public class UserService {
         userDAO.save(user);
     }
 
-    @Transactional
-    public void updateUserEmail(int id, Map<String, String> email) {
-        userDAO.patchMail(id, email.get("email"));
+    public User userPatch(int id, JsonPatch patch) {
+        try {
+            User user = getUserById(id);
+
+            JsonNode userNode = objectMapper.convertValue(user, JsonNode.class);
+
+            User patchedUser = objectMapper.treeToValue(patch.apply(userNode), User.class);
+
+            userDAO.save(patchedUser);
+
+            return patchedUser;
+        } catch (JsonProcessingException | JsonPatchException e) {
+            throw new RuntimeException(e);
+        }
     }
+
+
 }

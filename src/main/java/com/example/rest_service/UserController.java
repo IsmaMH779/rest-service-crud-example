@@ -1,10 +1,10 @@
 package com.example.rest_service;
 
+import com.github.fge.jsonpatch.JsonPatch;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.stereotype.Controller;
 
 import java.util.List;
-import java.util.Map;
 
 @Controller
 public class UserController {
@@ -33,7 +33,7 @@ public class UserController {
         userService.updateUser(id, userDTO);
     }
 
-    public void patchEmail(int id, Map<String, String> email) {
-        userService.updateUserEmail(id, email);
+    public User userPatch(int id, JsonPatch patch) {
+        return userService.userPatch(id, patch);
     }
 }
